@@ -36,30 +36,7 @@ class Facturacion extends Controller {
     $config['uri_segment'] = $uri_segment;
     $this->pagination->initialize($config);
     $data['pagination'] = $this->pagination->create_links();
-    
-    // generate table data
-    /*$this->load->library('table');
-    $this->table->set_empty("&nbsp;");
-    $this->table->set_heading('','Serie', 'No.', 'Nit', 'Fecha', 'Nombre', 'Monto', 'C/F', 'Anulado', '');
-    $i = 0 + $offset;
-    
-    foreach ($facturas as $factura) {
-      $this->table->add_row(
-        ++$i, 
-        $factura->serie,
-        $factura->numero,
-        $factura->nit,
-        date('d-m-Y',strtotime($factura->fecha)),  
-        $factura->nombre, 
-        $factura->monto,
-        $factura->cons_final,
-        $factura->anulado,
-      	anchor('facturacion/view/'.$factura->nit,'view',array('class'=>'view')).' '.
-      	anchor('facturacion/update/'.$factura->nit,'update',array('class'=>'update')).' '.
-      	anchor('facturacion/delete/'.$factura->nit,'delete',array('class'=>'delete','onclick'=>"return confirm('Esta seguro de borrar este nit?')"))
-      );
-    }
-    $data['table'] = $this->table->generate();*/
+
     $data['table'] = $this->_generate_facturas_table($offset);
     
     // load view
@@ -137,7 +114,8 @@ class Facturacion extends Controller {
         $factura->anulado,
         anchor('facturacion/view/'.$factura->nit,'view',array('class'=>'view')).' '.
         anchor('facturacion/update/'.$factura->nit,'update',array('class'=>'update')).' '.
-        anchor('facturacion/delete/' . $factura->serie . '/' .$factura->numero,'delete',array('class'=>'delete','onclick'=>"return confirm('Esta seguro de borrar este nit?')"))
+        anchor('facturacion/delete/' . $factura->serie . '/' .$factura->numero,'delete',
+          array('class'=>'delete','onclick'=>"return confirm('Esta seguro de borrar la factura $factura->serie - $factura->numero?')"))
       );
     }
     return $this->table->generate();
@@ -277,16 +255,17 @@ class Facturacion extends Controller {
       // save data
       $anulado = ($this->input->post('anulado') == 'S' ? true : false);
       $cons_final = ($this->input->post('cons_final') == 'S' ? true : false);
-      
+      $monto = $this->input->post('monto');
       
       $nit = $this->input->post('nit');
+      $nombre = $this->input->post('nombre');
 
-      if ($cons_final == true) {
-        $nombre = 'C/F';
+      /*if ($cons_final == true) {
+        $nombre = 'C/F';        
       } 
       else {
-        $nombre = $this->input->post('nombre');
-      }
+        
+      }*/
 
       // Valores cundo la factura esta anulada.
       if ($anulado == true) {
@@ -301,7 +280,7 @@ class Facturacion extends Controller {
         'numero' => $this->input->post('numero'),
         'fecha' => date('Y-m-d', strtotime($this->input->post('fecha'))),
         'nit' => $nit,
-        'monto' => $this->input->post('monto'),
+        'monto' => $monto,
         'nombre' => $nombre,
         'cons_final' => $cons_final,
         'anulado' => $anulado
@@ -309,15 +288,14 @@ class Facturacion extends Controller {
       );
       
       //var_dump($registro);
-      if ( isset( $nit ) == true  ) {
-        $this->factura_model->add($registro);
+      if ( empty( $nit ) == true  ) {
+        $this->factura_model->add_sin_nit($registro);
         //echo "ADD factura con nit...<br />";  
       }
       else {
+      	$this->factura_model->add($registro);
       //echo "ADD Factura sin nit...<br />";
         //var_dump($registro);
-        $this->factura_model->add_sin_nit($registro); 
-        
       }
       
       

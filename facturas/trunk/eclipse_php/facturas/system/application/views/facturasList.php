@@ -11,10 +11,13 @@
 <body>
 	<div class="content">
 		<h1>Facturas</h1>
+		<?php echo anchor('facturacion/add/','agregar registro',array('class'=>'add')); ?>
+		<br />
+		<br />
 		<div class="paging"><?php echo $pagination; ?></div>
 		<div class="data"><?php echo $table; ?></div>
 		<br />
-		<?php echo anchor('nit/add/','agregar registro',array('class'=>'add')); ?>
+		<?php echo anchor('facturacion/add/','agregar registro',array('class'=>'add')); ?>
 	</div>
 </body>
 </html>
