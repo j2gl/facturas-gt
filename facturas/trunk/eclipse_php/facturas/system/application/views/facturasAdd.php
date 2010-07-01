@@ -6,6 +6,7 @@
   <link href="<?php echo base_url(); ?>style/style.css" rel="stylesheet" type="text/css" />
   <link href="<?php echo base_url(); ?>style/calendar.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="<?php echo base_url(); ?>script/calendar.js"></script>
+  <script type="text/javascript" src="<?php echo base_url(); ?>script/jquery-1.4.2.js"></script>
 </head>
 <body onload="document.form1.fecha.focus();">
 <div class="content">
@@ -21,7 +22,7 @@
     <?php echo $this->validation->serie_error; ?>
     <input type="text" name="numero" class="text" value="<?php echo $this->validation->numero; ?>"/>
     <?php echo $this->validation->numero_error; ?>
-  </td>  
+  </td>
 </tr>
 <tr>
   <td valign="top">Fecha (dd-mm-yyyy)<span style="color:red;">*</span></td>
@@ -36,25 +37,25 @@
 <tr>
   <td valign="top">C/F<span style="color:red;">*</span></td>
   <td>
-  <?php 
+  <?php
   /*
     <input type="radio" name="cons_final" value="S" <?php echo $this->validation->set_radio('cons_final', 'S'); ?>/> Si
     <input type="radio" name="cons_final" value="N" <?php echo $this->validation->set_radio('cons_final', 'N', true); ?>/> No
     */
-  ?>  
+  ?>
     <input type="radio" name="cons_final" value="S" /> Si
-    <input type="radio" name="cons_final" value="N" checked="checked" /> No   
+    <input type="radio" name="cons_final" value="N" checked="checked" /> No
     <?php echo $this->validation->cons_final_error; ?>
   </td>
-</tr> 
+</tr>
 <tr>
   <td valign="top">Nit<span style="color:red;">*</span></td>
-  <td><input type="text" name="nit" class="text" value="<?php echo $this->validation->nit; ?>"/>
+  <td><input type="text" id="nit" name="nit" class="text" value="<?php echo $this->validation->nit; ?>"/>
   <?php echo $this->validation->nit_error; ?></td>
 </tr>
 <tr>
   <td valign="top">Nombre<span style="color:red;"></span></td>
-  <td><input type="text" name="nombre" class="text" value="<?php echo $this->validation->nombre; ?>"/>
+  <td><input type="text" id="nombre" name="nombre" class="text" value="<?php echo $this->validation->nombre; ?>"/>
   <?php echo $this->validation->nombre_error; ?></td>
 </tr>
 <tr>
@@ -65,12 +66,12 @@
 <tr>
   <td valign="top">Anulado<span style="color:red;"></span></td>
   <td>
-  <?php 
+  <?php
   /*
     <input type="radio" name="anulado" value="S" <?php echo $this->validation->set_radio('anulado', 'S'); ?>/> Si
     <input type="radio" name="anulado" value="N" <?php echo $this->validation->set_radio('anulado', 'N', true); ?>/> No
     */
-  ?>    
+  ?>
     <input type="radio" name="anulado" value="S" /> Si
     <input type="radio" name="anulado" value="N" checked="checked" /> No
     <?php echo $this->validation->anulado_error; ?>
@@ -92,8 +93,17 @@
 <?php if (isset($link_back)) echo $link_back; ?>
 <br />
 <br />
-
-		
 </div>
+<script>
+jQuery(function(){
+  $("#nit").blur( function() {
+    $.getJSON('<?php echo site_url("facturacion/buscar_nombre") ?>/' + $("#nit").val(),
+        function(data) {
+          $("#nombre").val(data.nombre)
+        });
+	});
+});
+</script>
+
 </body>
 </html>
