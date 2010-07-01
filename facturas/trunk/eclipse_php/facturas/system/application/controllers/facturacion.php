@@ -1,7 +1,7 @@
 <?php
 class Facturacion extends Controller {
 
-  private $limit = 100;
+  private $limit = 30;
 
   //private $limit_add_factura = 100;
 
@@ -39,7 +39,7 @@ class Facturacion extends Controller {
     $offset = $this->uri->segment($uri_segment);
 
     // load data
-    $facturas = $this->factura_model->get_paged_list($this->limit, $offset)->result();
+    //$facturas = $this->factura_model->get_paged_list($this->limit, $offset)->result();
 
     // generate pagination
     $this->load->library('pagination');
@@ -54,6 +54,50 @@ class Facturacion extends Controller {
 
     // load view
     $this->load->view('facturasList', $data);
+  }
+
+
+  function _generate_summary_table($offset = 0) {
+
+    // load data
+    $result_set = $this->factura_model->get_quarter_summary_paged_list($this->limit, $offset)->result();
+
+    // generate table data
+    $this->load->library('table');
+    $this->table->set_empty("&nbsp;");
+    $this->table->set_heading('A&ntilde;o', 'Trimestre', 'Total');
+
+    $i = 0;
+    foreach ($result_set as $row){
+      $this->table->add_row(
+        $row->year,
+        $row->quarter,
+        $row->monto
+      );
+    }
+    return $this->table->generate();
+  }
+
+  function show_summary($offset = 0) {
+    // offset
+    $uri_segment = 3;
+    $offset = $this->uri->segment($uri_segment);
+
+    // generate pagination
+    $this->load->library('pagination');
+    $config['base_url'] = site_url('facturacion/show_summary/');
+    $config['total_rows'] = $this->factura_model->count_quarter_summary_paged_list();
+    $config['per_page'] = $this->limit;
+    $config['uri_segment'] = $uri_segment;
+    $this->pagination->initialize($config);
+    $data['pagination'] = $this->pagination->create_links();
+
+    $data['table'] = $this->_generate_summary_table($offset);
+
+    $data['link_back'] = anchor('facturacion/index/','Regresar a listado de facturas', array('class'=>'link'));
+
+    // load view
+    $this->load->view('facturasSummary', $data);
   }
 
   // validation fields
@@ -107,7 +151,7 @@ class Facturacion extends Controller {
   function _generate_facturas_table($offset = 0) {
 
     // load data
-    $facturas = $this->factura_model->get_paged_list($this->limit, 0)->result();
+    $facturas = $this->factura_model->get_paged_list($this->limit, $offset)->result();
 
     // generate table data
     $this->load->library('table');
@@ -214,6 +258,8 @@ class Facturacion extends Controller {
 
       }
       else {
+        $this->add_factura();
+        /*
         $this->_set_fields();
         $data['message'] = '';
         $data['action'] = site_url('facturacion/add_factura');
@@ -231,6 +277,7 @@ class Facturacion extends Controller {
         $this->validation->monto = 0.00;
 
         $this->load->view('facturasAddResto', $data);
+        */
       }
     }
   }

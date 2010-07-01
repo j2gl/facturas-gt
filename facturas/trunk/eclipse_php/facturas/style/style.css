@@ -63,6 +63,14 @@ div.success {
 	width:80%;
 }
 
+a.link {
+  font-size: 9pt;
+  color:#900;
+  font-weight:bold;
+  
+  text-decoration: none;
+}
+
 a.update, a.delete, a.add, a.view, a.back {
 	font-size: 9pt;
 	color:#900;

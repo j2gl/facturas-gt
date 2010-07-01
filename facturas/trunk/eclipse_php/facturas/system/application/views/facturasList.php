@@ -11,6 +11,8 @@
 <body>
 	<div class="content">
 		<h1>Facturas</h1>
+    <?php echo anchor('nit/','Nits',array('class'=>'link')); ?> -
+    <?php echo anchor('facturacion/show_summary/','Ver Resumen',array('class'=>'link')); ?><br /><br />
 		<?php echo anchor('facturacion/add/','agregar registro',array('class'=>'add')); ?>
 		<br />
 		<br />

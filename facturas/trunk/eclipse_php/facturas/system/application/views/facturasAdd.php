@@ -79,7 +79,7 @@
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td><input type="submit" value="Siguiente"/></td>
+  <td><input type="submit" value="Agregar"/></td>
 </tr>
 </table>
 </div>
