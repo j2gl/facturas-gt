@@ -97,12 +97,58 @@
 <script>
 jQuery(function(){
   $("#nit").blur( function() {
-    $.getJSON('<?php echo site_url("facturacion/buscar_nombre") ?>/' + $("#nit").val(),
-        function(data) {
-          $("#nombre").val(data.nombre)
-        });
-	});
+    if (document.form1.nit.value.length > 0) {
+      if ( isValidNit(document.form1.nit) == true) {
+        $.getJSON('<?php echo site_url("facturacion/buscar_nombre") ?>/' + $("#nit").val(),
+            function(data) {
+              $("#nombre").val(data.nombre)
+            });
+      }    
+      else {
+        document.form1.nombre.value = "";
+        alert("El nit " + $("#nit").val() + " es invalido");
+        document.form1.nit.focus();
+      }
+    }
+  });
 });
+
+
+function isValidNit(obj) {
+  if ( (obj.value == "") || (obj == null) )
+    return true;
+  if (obj.value*1 == 0)
+    return false;
+ 
+
+  var strNit = obj.value.toUpperCase();
+  strNit = strNit.replace("-","");
+ 
+  var nit = strNit.substring(0, strNit.length - 1);
+  var suma = 0;
+  var pos = nit.length + 1;
+  for (var c=0; c < nit.length; c++)
+  {
+    suma += nit.charAt(c) * pos;
+    pos -= 1;
+  }
+  if (isNaN(suma))
+      return false;
+ 
+  var verificador = 11 - (suma % 11);
+  if (verificador == 10)
+      verificador = "K"
+  else if (verificador == 11)
+      verificador= 0;
+  
+  nit = nit + verificador;
+
+  if (strNit == nit)
+      return true;
+  else
+      return false;
+}
+
 </script>
 
 </body>
