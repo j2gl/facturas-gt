@@ -1,4 +1,7 @@
 <?php
+// Modifciacion para que acepte otros tipos de caracteres
+	header('Content-Type: text/html; charset=utf-8');
+	
 /*
 |---------------------------------------------------------------
 | PHP ERROR REPORTING LEVEL
