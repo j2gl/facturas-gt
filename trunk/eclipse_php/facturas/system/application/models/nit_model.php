@@ -22,7 +22,7 @@ class Nit_model extends Model {
     return $this->db->get($this->the_table  , $limit, $offset);
   }
   
-  // get nit by nite
+  // get nit by nit
   function get_by_id($id){
     $this->db->where('nit', $id);
     return $this->db->get($this->the_table);
@@ -44,8 +44,12 @@ class Nit_model extends Model {
    * @param $data
    * @return unknown_type
    */
-  function update($id, $data){
-    $this->db->where('nit', $id);
+  function update($id, $data) {
+	$record_version_old = $data['record_version'];
+	$data['record_version'] = date('Y-m-d H:i:s');
+	
+	$this->db->where('nit', $id);
+	$this->db->where('record_version', $record_version_old);
     $this->db->update($this->the_table, $data);
   }
   

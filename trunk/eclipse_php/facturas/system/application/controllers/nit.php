@@ -4,6 +4,7 @@ class Nit extends Controller {
 
   // num of records per page
   private $limit = 100;
+  private $dateFormatDataBase = 'Y-m-d H:i:s';
   
   function Nit() {
     parent::Controller();
@@ -91,7 +92,7 @@ class Nit extends Controller {
       $registro = array(
               'nit' => $this->input->post('nit'),
       				'nombre' => $this->input->post('nombre'),
-      				'record_version' => date('Y-m-d H:i:s')
+      				'record_version' => date($this->dateFormatDataBase)
       );
       
       $nit = $this->nit_model->add($registro);
@@ -126,7 +127,7 @@ class Nit extends Controller {
     if (!empty($registro)) {
       $this->validation->nit = $id;
       $this->validation->nombre = $registro->nombre;
-      $this->validation->record_version = date('d-m-Y',strtotime($registro->record_version));
+      $this->validation->record_version = date($this->dateFormatDataBase, strtotime($registro->record_version));
       $data['message'] = '';
     }
     else {
@@ -163,7 +164,8 @@ class Nit extends Controller {
       // save data
       $id = $this->input->post('nit');
       $registro = array('nombre' => $this->input->post('nombre'),
-      				'record_version' => date('Y-m-d', strtotime($this->input->post('record_version'))));
+                        'record_version' => date($this->dateFormatDataBase, strtotime($this->input->post('record_version'))), 
+						'nit' => $id);
       $this->nit_model->update($id,$registro);
       
       // set user message
@@ -187,7 +189,7 @@ class Nit extends Controller {
 	function _set_fields(){
 		$fields['nit'] = 'nit';
 		$fields['nombre'] = 'nombre';
-		//$fields['record_version'] = 'record_version';
+		$fields['record_version'] = 'record_version';
 
 		$this->validation->set_fields($fields);
 	}
@@ -196,7 +198,7 @@ class Nit extends Controller {
 	function _set_rules(){
 		$rules['nit'] = 'trim|required';
 		$rules['nombre'] = 'trim|required';
-		//$rules['record_version'] = 'trim|required|callback_valid_date';
+		$rules['record_version'] = 'trim|required|callback_valid_date';
 
 		$this->validation->set_rules($rules);
 
