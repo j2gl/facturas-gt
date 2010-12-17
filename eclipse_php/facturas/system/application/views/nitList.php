@@ -11,6 +11,9 @@
 <body>
 	<div class="content">
 		<h1>Nits</h1>
+		<?php echo anchor('nit/add/','agregar registro',array('class'=>'add')); ?>
+		<br />
+		<br />
 		<div class="paging"><?php echo $pagination; ?></div>
 		<div class="data"><?php echo $table; ?></div>
 		<br />

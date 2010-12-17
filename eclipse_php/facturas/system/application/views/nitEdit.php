@@ -12,6 +12,7 @@
 		<h1><?php echo $title; ?></h1>
 		<?php echo $message; ?>
 		<form method="post" action="<?php echo $action; ?>">
+		<input type="hidden" name="record_version" value="<?php echo date('Y-m-d H:i:s', strtotime($this->validation->record_version)); ?>" />
 		<div class="data">
 		<table>
 			<tr>

@@ -22,8 +22,8 @@
 				<td><?php echo $nit->nombre; ?></td>
 			</tr>
 			<tr>
-				<td valign="top">Fecha (dd-mm-yyyy)</td>
-				<td><?php echo date('d-m-Y',strtotime($nit->record_version)); ?></td>
+				<td valign="top">&Uacute;ltima Modificaci&oacute;n</td>
+				<td><?php echo date('d-m-Y H:i:s', strtotime($nit->record_version)); ?></td>
 			</tr>
 		</table>
 		</div>
