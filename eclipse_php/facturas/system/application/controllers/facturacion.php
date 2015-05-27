@@ -20,6 +20,7 @@ class Facturacion extends Controller {
   }
 
   function buscar_nombre($nit) {
+  	$result = new stdClass();
   	$data = $this->nit_model->get_by_id($nit);
 
   	if ($data->num_rows == 0) {
