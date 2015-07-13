@@ -141,7 +141,7 @@ class Facturacion extends Controller {
   // date_validation callback
   function valid_date($str) {
     //if(!ereg("^(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-([0-9]{4})$", $str)) {
-	if(!preg_match("/^(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-([0-9]{4})$/", $str)) {
+    if ( preg_match( "/^(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-([0-9]{4})$/", $str) == false) {
       $this->validation->set_message('valid_date', 'Formato de la fecha no es valido. dd-mm-yyyy');
       return false;
     }
